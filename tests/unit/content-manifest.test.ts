@@ -4,10 +4,16 @@ import { parseContentManifests } from "@/server/validation/content-manifest";
 const navigation = {
   categories: [
     { slug: "watch", name: "Watch", description: "Xem", illustrationUrl: "/illustrations/watch.svg", sortOrder: 10, status: "ACTIVE" },
+    { slug: "read", name: "Read", description: "Đọc", illustrationUrl: "/illustrations/read.svg", sortOrder: 20, status: "ACTIVE" },
+    { slug: "songs", name: "Songs", description: "Hát", illustrationUrl: "/illustrations/songs.svg", sortOrder: 30, status: "ACTIVE" },
+    { slug: "digital-flashcards", name: "Digital Flashcards", description: "Thẻ", illustrationUrl: "/illustrations/flashcards.svg", sortOrder: 40, status: "ACTIVE" },
     { slug: "print-and-plays", name: "Print and Plays", description: "In", illustrationUrl: "/illustrations/print.svg", sortOrder: 20, status: "ACTIVE" },
   ],
   contentTypes: [
     { categorySlug: "watch", slug: "stories", name: "Stories", description: "Truyện", illustrationUrl: "/illustrations/stories.svg", sortOrder: 10, status: "ACTIVE" },
+    { categorySlug: "watch", slug: "dialogues", name: "Dialogues", description: "Hội thoại", illustrationUrl: "/illustrations/dialogues.svg", sortOrder: 20, status: "ACTIVE" },
+    { categorySlug: "read", slug: "storybooks", name: "Storybooks", description: "Truyện", illustrationUrl: "/illustrations/read.svg", sortOrder: 10, status: "ACTIVE" },
+    { categorySlug: "read", slug: "dialogue-books", name: "Dialogue Books", description: "Hội thoại", illustrationUrl: "/illustrations/read.svg", sortOrder: 20, status: "ACTIVE" },
   ],
 };
 
@@ -44,6 +50,22 @@ describe("content manifests", () => {
     const invalid = structuredClone(resources);
     invalid.resources[0].levelCodes = ["L9"];
     expect(() => parseContentManifests(navigation, curriculum, invalid, ["heyzine.com"])).toThrow("Level L9");
+  });
+
+  test("requires exactly the fixed information architecture", () => {
+    const invalid = structuredClone(navigation);
+    invalid.categories.push({ slug: "games", name: "Games", description: "Game", illustrationUrl: "/games.svg", sortOrder: 60, status: "ACTIVE" });
+    expect(() => parseContentManifests(invalid, curriculum, resources, ["heyzine.com"])).toThrow("đúng 5 Category");
+  });
+
+  test("rejects duplicate curriculum identities and duplicate resource Levels", () => {
+    const duplicateCurriculum = structuredClone(curriculum);
+    duplicateCurriculum.curriculumUnits.push({ ...duplicateCurriculum.curriculumUnits[0], key: "09-school-copy" });
+    expect(() => parseContentManifests(navigation, duplicateCurriculum, resources, ["heyzine.com"])).toThrow("Month + Topic");
+
+    const duplicateLevels = structuredClone(resources);
+    duplicateLevels.resources[0].levelCodes = ["L3", "L3"];
+    expect(() => parseContentManifests(navigation, curriculum, duplicateLevels, ["heyzine.com"])).toThrow("Level bị trùng");
   });
 
   test("rejects an active thumbnail from an unapproved host", () => {

@@ -19,3 +19,19 @@ test("narrow viewport has no horizontal page overflow", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });
 
+for (const [path, heading] of [
+  ["/learning/watch", "Xem và khám phá"],
+  ["/learning/read", "Lật mở từng trang sách"],
+  ["/learning/watch/stories", "Animated Stories"],
+  ["/learning/watch/dialogues", "Animated Dialogues"],
+  ["/learning/read/storybooks", "Digital Storybooks"],
+  ["/learning/read/dialogue-books", "Digital Dialogue Books"],
+  ["/learning/songs", "Songs"],
+  ["/learning/digital-flashcards", "Digital Flashcards"],
+  ["/learning/print-and-plays", "Print and Plays"],
+] as const) {
+  test(`${path} renders its scoped page`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { name: heading, exact: true }).first()).toBeVisible();
+  });
+}

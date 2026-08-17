@@ -41,7 +41,7 @@ if (!apply) {
   await prisma.$disconnect();
   process.exit(0);
 }
-if (changes.some(({ item }) => item.status === "ACTIVE") && !args.has("--confirm-active")) {
+if (changes.some(({ item, diff }) => item.status === "ACTIVE" && (diff.action === "CREATE" || existing.get(item.slug)?.status !== "ACTIVE")) && !args.has("--confirm-active")) {
   await prisma.$disconnect();
   throw new Error("Có resource chuyển sang ACTIVE; chạy lại với --confirm-active sau khi review.");
 }

@@ -64,6 +64,8 @@ const resourceSchema = z.object({
 });
 
 const resourcesSchema = z.object({ resources: z.array(resourceSchema) });
+const REQUIRED_CATEGORIES = ["watch", "read", "songs", "digital-flashcards", "print-and-plays"];
+const REQUIRED_CONTENT_TYPES = ["watch/stories", "watch/dialogues", "read/storybooks", "read/dialogue-books"];
 
 export type ParsedCatalog = {
   navigation: z.infer<typeof navigationSchema>;
@@ -73,6 +75,10 @@ export type ParsedCatalog = {
 
 function assertUnique(values: string[], label: string): void {
   if (new Set(values).size !== values.length) throw new Error(`${label} bị trùng.`);
+}
+
+function assertExactSet(actual: string[], required: string[], message: string): void {
+  if (actual.length !== required.length || required.some((value) => !actual.includes(value))) throw new Error(message);
 }
 
 export function parseContentManifests(
@@ -87,8 +93,11 @@ export function parseContentManifests(
   const { resources } = resourcesSchema.parse(rawResources);
   assertUnique(navigation.categories.map((item) => item.slug), "Category slug");
   assertUnique(navigation.contentTypes.map((item) => `${item.categorySlug}/${item.slug}`), "Content Type");
+  assertExactSet(navigation.categories.map((item) => item.slug), REQUIRED_CATEGORIES, "Navigation phải có đúng 5 Category cố định.");
+  assertExactSet(navigation.contentTypes.map((item) => `${item.categorySlug}/${item.slug}`), REQUIRED_CONTENT_TYPES, "Navigation phải có đúng 4 Content Type cố định.");
   assertUnique(curriculum.levels.map((item) => item.code), "Level code");
   assertUnique(curriculum.curriculumUnits.map((item) => item.key), "Curriculum Unit key");
+  assertUnique(curriculum.curriculumUnits.map((item) => `${item.monthNumber}/${item.monthTopic}`), "Curriculum Unit Month + Topic");
   assertUnique(resources.map((item) => item.slug), "Resource slug");
 
   const categories = new Map(navigation.categories.map((item) => [item.slug, item]));
@@ -98,6 +107,7 @@ export function parseContentManifests(
   const activePrintUnits = new Set<string>();
 
   for (const resource of resources) {
+    assertUnique(resource.levelCodes, `${resource.slug}: Level`);
     const category = categories.get(resource.categorySlug);
     if (!category) throw new Error(`Không tìm thấy Category ${resource.categorySlug}.`);
     if (resource.contentTypeSlug && !contentTypes.has(`${resource.categorySlug}/${resource.contentTypeSlug}`)) {

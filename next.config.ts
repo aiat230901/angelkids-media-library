@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const heyzineHosts = (process.env.HEYZINE_ALLOWED_HOSTS ?? "heyzine.com").split(",").map((host) => `https://${host.trim()}`).join(" ");
-const thumbnailHosts = (process.env.THUMBNAIL_ALLOWED_HOSTS ?? "i.ytimg.com").split(",").map((host) => `https://${host.trim()}`).join(" ");
+const thumbnailHostnames = (process.env.THUMBNAIL_ALLOWED_HOSTS ?? "i.ytimg.com").split(",").map((host) => host.trim()).filter(Boolean);
+const thumbnailHosts = thumbnailHostnames.map((host) => `https://${host}`).join(" ");
 const csp = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -18,6 +19,7 @@ const csp = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: { remotePatterns: thumbnailHostnames.map((hostname) => ({ protocol: "https", hostname })) },
   async headers() {
     return [{ source: "/(.*)", headers: [
       { key: "Content-Security-Policy", value: csp },
@@ -29,4 +31,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
