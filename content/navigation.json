@@ -1,0 +1,16 @@
+{
+  "categories": [
+    { "slug": "watch", "name": "Watch", "description": "Xem những câu chuyện và hội thoại sinh động.", "illustrationUrl": "/illustrations/watch.svg", "sortOrder": 10, "status": "ACTIVE" },
+    { "slug": "read", "name": "Read", "description": "Lật mở sách, nghe và đọc theo từng trang.", "illustrationUrl": "/illustrations/read.svg", "sortOrder": 20, "status": "ACTIVE" },
+    { "slug": "songs", "name": "Songs", "description": "Học từ và câu mới qua những giai điệu vui.", "illustrationUrl": "/illustrations/songs.svg", "sortOrder": 30, "status": "ACTIVE" },
+    { "slug": "digital-flashcards", "name": "Digital Flashcards", "description": "Nhìn hình, nghe từ và luyện tập thật dễ dàng.", "illustrationUrl": "/illustrations/flashcards.svg", "sortOrder": 40, "status": "ACTIVE" },
+    { "slug": "print-and-plays", "name": "Print and Plays", "description": "Tải học liệu, in ra và cùng con học qua trò chơi.", "illustrationUrl": "/illustrations/print.svg", "sortOrder": 50, "status": "ACTIVE" }
+  ],
+  "contentTypes": [
+    { "categorySlug": "watch", "slug": "stories", "name": "Stories", "description": "Những câu chuyện hoạt hình có cốt truyện và lời kể.", "illustrationUrl": "/illustrations/watch.svg", "sortOrder": 10, "status": "ACTIVE" },
+    { "categorySlug": "watch", "slug": "dialogues", "name": "Dialogues", "description": "Hội thoại gần gũi giúp con làm quen mẫu câu.", "illustrationUrl": "/illustrations/flashcards.svg", "sortOrder": 20, "status": "ACTIVE" },
+    { "categorySlug": "read", "slug": "storybooks", "name": "Storybooks", "description": "Truyện kỹ thuật số có audio kể chuyện.", "illustrationUrl": "/illustrations/read.svg", "sortOrder": 10, "status": "ACTIVE" },
+    { "categorySlug": "read", "slug": "dialogue-books", "name": "Dialogue Books", "description": "Sách hội thoại có audio giúp con nghe và đọc theo.", "illustrationUrl": "/illustrations/read.svg", "sortOrder": 20, "status": "ACTIVE" }
+  ]
+}
+

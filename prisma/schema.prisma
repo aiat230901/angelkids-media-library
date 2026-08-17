@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Status {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum Provider {
+  YOUTUBE
+  HEYZINE
+  GOOGLE_DRIVE
+}
+
+enum ResourceFormat {
+  ANIMATED_STORY_VIDEO
+  ANIMATED_DIALOGUE_VIDEO
+  LEARNING_SONG_VIDEO
+  SCHOOL_SONG_VIDEO
+  DIGITAL_STORYBOOK
+  DIGITAL_DIALOGUE_BOOK
+  DIGITAL_FLASHCARD_SET
+  PRINT_AND_PLAY_COLLECTION
+}
+
+model Category {
+  id              String             @id @default(uuid()) @db.Uuid
+  slug            String             @unique @db.VarChar(80)
+  name            String             @db.VarChar(100)
+  description     String             @db.VarChar(280)
+  illustrationUrl String             @db.Text
+  sortOrder       Int                @default(100)
+  status          Status             @default(ACTIVE)
+  createdAt       DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime           @updatedAt @db.Timestamptz(6)
+  contentTypes    ContentType[]
+  resources       LearningResource[]
+}
+
+model ContentType {
+  id              String             @id @default(uuid()) @db.Uuid
+  categoryId      String             @db.Uuid
+  slug            String             @db.VarChar(80)
+  name            String             @db.VarChar(100)
+  description     String             @db.VarChar(280)
+  illustrationUrl String             @db.Text
+  sortOrder       Int                @default(100)
+  status          Status             @default(ACTIVE)
+  createdAt       DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime           @updatedAt @db.Timestamptz(6)
+  category        Category           @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  resources       LearningResource[]
+
+  @@unique([categoryId, slug])
+  @@index([categoryId, status, sortOrder])
+}
+
+model Level {
+  id             String          @id @default(uuid()) @db.Uuid
+  code           String          @unique @db.VarChar(30)
+  name           String          @db.VarChar(80)
+  ageRange       String?         @db.VarChar(80)
+  sortOrder      Int             @default(100)
+  status         Status          @default(ACTIVE)
+  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime        @updatedAt @db.Timestamptz(6)
+  resourceLevels ResourceLevel[]
+}
+
+model CurriculumUnit {
+  id           String             @id @default(uuid()) @db.Uuid
+  monthNumber  String             @db.Char(2)
+  monthTopic   String             @db.VarChar(220)
+  displayLabel String             @db.VarChar(260)
+  sortOrder    Int                @default(100)
+  status       Status             @default(ACTIVE)
+  createdAt    DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime           @updatedAt @db.Timestamptz(6)
+  resources    LearningResource[]
+
+  @@unique([monthNumber, monthTopic])
+  @@index([status, sortOrder])
+}
+
+model LearningResource {
+  id               String             @id @default(uuid()) @db.Uuid
+  slug             String             @unique @db.VarChar(160)
+  assetName        String             @db.VarChar(200)
+  description      String?            @db.VarChar(500)
+  categoryId       String             @db.Uuid
+  contentTypeId    String?            @db.Uuid
+  curriculumUnitId String?            @db.Uuid
+  provider         Provider
+  resourceFormat   ResourceFormat
+  externalUrl      String             @db.Text
+  thumbnailUrl     String?            @db.Text
+  altText          String             @db.VarChar(250)
+  status           Status             @default(DRAFT)
+  sortOrder        Int                @default(100)
+  createdAt        DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime           @updatedAt @db.Timestamptz(6)
+  category         Category           @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  contentType      ContentType?       @relation(fields: [contentTypeId], references: [id], onDelete: Restrict)
+  curriculumUnit   CurriculumUnit?    @relation(fields: [curriculumUnitId], references: [id], onDelete: Restrict)
+  levels           ResourceLevel[]
+
+  @@index([categoryId, contentTypeId, status, sortOrder])
+  @@index([curriculumUnitId, status, sortOrder])
+  @@index([status, resourceFormat, sortOrder])
+}
+
+model ResourceLevel {
+  resourceId String           @db.Uuid
+  levelId    String           @db.Uuid
+  resource   LearningResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  level      Level            @relation(fields: [levelId], references: [id], onDelete: Restrict)
+
+  @@id([resourceId, levelId])
+  @@index([levelId, resourceId])
+}
+

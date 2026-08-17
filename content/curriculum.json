@@ -1,0 +1,14 @@
+{
+  "levels": [
+    { "code": "L3", "name": "Level 3", "ageRange": "3-4 tuổi", "sortOrder": 10, "status": "ACTIVE" },
+    { "code": "L4", "name": "Level 4", "ageRange": "4-5 tuổi", "sortOrder": 20, "status": "ACTIVE" },
+    { "code": "L5", "name": "Level 5", "ageRange": "5-6 tuổi", "sortOrder": 30, "status": "ACTIVE" }
+  ],
+  "curriculumUnits": [
+    { "key": "09-truong-hoc", "monthNumber": "09", "monthTopic": "Trường học | Chào năm học mới", "displayLabel": "09 - Trường học | Chào năm học mới", "sortOrder": 10, "status": "ACTIVE" },
+    { "key": "10-ban-than", "monthNumber": "10", "monthTopic": "Bản thân | Tôi khác biệt", "displayLabel": "10 - Bản thân | Tôi khác biệt", "sortOrder": 20, "status": "ACTIVE" },
+    { "key": "11-nghe-nghiep", "monthNumber": "11", "monthTopic": "Nghề nghiệp | Bé tài năng", "displayLabel": "11 - Nghề nghiệp | Bé tài năng", "sortOrder": 30, "status": "ACTIVE" },
+    { "key": "12-gia-dinh", "monthNumber": "12", "monthTopic": "Gia đình | Mùa Đông yêu thương", "displayLabel": "12 - Gia đình | Mùa Đông yêu thương", "sortOrder": 40, "status": "ACTIVE" }
+  ]
+}
+
