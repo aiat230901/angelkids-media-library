@@ -1,5 +1,6 @@
 node_modules/
 .next/
+.worktrees/
 coverage/
 playwright-report/
 test-results/
@@ -8,4 +9,3 @@ test-results/
 .env.*.local
 src/generated/prisma/
 *.tsbuildinfo
-
