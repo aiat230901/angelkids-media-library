@@ -19,6 +19,32 @@ test("narrow viewport has no horizontal page overflow", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });
 
+test("Watch keeps its copy on tablet and hides only its description on mobile", async ({ page }) => {
+  const watch = page.getByRole("link", { name: /Watch/ }).first();
+
+  await page.setViewportSize({ width: 768, height: 800 });
+  await page.goto("/learning");
+  await expect(watch.locator("img")).toHaveAttribute("src", /watch\.png/);
+  await expect(watch.locator(".category-description")).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 800 });
+  await expect(watch.locator("strong")).toHaveText("Watch");
+  await expect(watch.locator(".cta")).toBeVisible();
+  await expect(watch.locator(".category-description")).toBeHidden();
+});
+
+test("featured Print and Plays stays full-width at a 440px mobile viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 440, height: 956 });
+  await page.goto("/learning");
+
+  const widths = await page.getByRole("link", { name: /Print and Plays/ }).evaluate((card) => ({
+    card: card.getBoundingClientRect().width,
+    art: card.querySelector(".category-art")?.getBoundingClientRect().width ?? 0,
+  }));
+
+  expect(widths.art / widths.card).toBeGreaterThan(0.9);
+});
+
 for (const [path, heading] of [
   ["/learning/watch", "Xem và khám phá"],
   ["/learning/read", "Lật mở từng trang sách"],
