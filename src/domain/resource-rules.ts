@@ -37,7 +37,6 @@ export function validateResourceRule(input: ResourceRuleInput): { success: boole
   if (input.provider !== rule.provider) errors.push("Provider không khớp resource format.");
   if (!rule.unitOptional && !input.curriculumUnitKey) errors.push("Curriculum Unit là bắt buộc.");
   if (input.status === "ACTIVE" && !rule.levelsOptional && input.levelCodes.length === 0) errors.push("Active resource cần ít nhất một Level.");
-  if (input.status === "ACTIVE" && !input.thumbnailUrl.trim()) errors.push("Active resource cần thumbnail.");
+  if (input.status === "ACTIVE" && input.provider !== "YOUTUBE" && !input.thumbnailUrl.trim()) errors.push("Active resource cần thumbnail.");
   return { success: errors.length === 0, errors };
 }
-

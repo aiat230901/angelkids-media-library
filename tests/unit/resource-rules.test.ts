@@ -41,9 +41,21 @@ describe("resource activation matrix", () => {
     expect(result.success).toBe(true);
   });
 
-  test("requires at least one Level and thumbnail for other active resources", () => {
+  test("requires at least one Level for active resources", () => {
     expect(validateResourceRule({ ...story, levelCodes: [] }).success).toBe(false);
-    expect(validateResourceRule({ ...story, thumbnailUrl: "" }).success).toBe(false);
+  });
+
+  test("allows YouTube to derive its thumbnail but still requires covers for other providers", () => {
+    expect(validateResourceRule({ ...story, thumbnailUrl: "" }).success).toBe(true);
+    expect(validateResourceRule({
+      ...story,
+      categorySlug: "read",
+      contentTypeSlug: "storybooks",
+      provider: "HEYZINE",
+      resourceFormat: "DIGITAL_STORYBOOK",
+      externalUrl: "https://heyzine.com/flip-book/abc",
+      thumbnailUrl: "",
+    }).success).toBe(false);
   });
 
   test("allows only School Songs to omit Curriculum Unit", () => {
@@ -58,4 +70,3 @@ describe("resource activation matrix", () => {
     expect(validateResourceRule({ ...story, curriculumUnitKey: null }).success).toBe(false);
   });
 });
-

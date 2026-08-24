@@ -81,6 +81,38 @@ describe("content manifests", () => {
     expect(parseContentManifests(navigation, curriculum, draft, ["heyzine.com"]).resources[0].status).toBe("DRAFT");
   });
 
+  test("allows active YouTube resources to derive their thumbnail", () => {
+    const youtube = structuredClone(resources);
+    youtube.resources[0].thumbnailUrl = "";
+    expect(parseContentManifests(navigation, curriculum, youtube, ["heyzine.com"]).resources[0].status).toBe("ACTIVE");
+  });
+
+  test("accepts a configured published flashcard and its first-page cover", () => {
+    const flashcard = { resources: [{
+      ...resources.resources[0],
+      slug: "digital-flashcards-level-3",
+      assetName: "Digital Flashcards - Level 3",
+      categorySlug: "digital-flashcards",
+      contentTypeSlug: null,
+      provider: "HEYZINE",
+      resourceFormat: "DIGITAL_FLASHCARD_SET",
+      externalUrl: "https://mamnonangelkids.aflip.in/419742bc48.html",
+      thumbnailUrl: "https://cdnm.heyzine.com/files/uploaded/v3/419742bc48b3b1f4c98e740fb8f7713a0431f487.pdf-thumb.jpg",
+    }] };
+
+    expect(parseContentManifests(
+      navigation,
+      curriculum,
+      flashcard,
+      ["heyzine.com", "mamnonangelkids.aflip.in"],
+      ["cdnm.heyzine.com"],
+    ).resources).toHaveLength(1);
+    expect(() => parseContentManifests(navigation, curriculum, flashcard, ["heyzine.com"], ["cdnm.heyzine.com"]))
+      .toThrow("Hostname Heyzine");
+    expect(() => parseContentManifests(navigation, curriculum, flashcard, ["heyzine.com", "mamnonangelkids.aflip.in"], []))
+      .toThrow("thumbnail");
+  });
+
   test("rejects duplicate active printable collections for one unit", () => {
     const printable = {
       ...resources.resources[0],

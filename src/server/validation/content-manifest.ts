@@ -123,7 +123,7 @@ export function parseContentManifests(
     if (!rule.success) throw new Error(`${resource.slug}: ${rule.errors.join(" ")}`);
     const provider = validateProviderUrl(resource.provider, resource.externalUrl, heyzineHosts);
     if (!provider.success) throw new Error(`${resource.slug}: ${provider.error}`);
-    if (!resource.thumbnailUrl && resource.status !== "ACTIVE") {
+    if (!resource.thumbnailUrl && (resource.status !== "ACTIVE" || resource.provider === "YOUTUBE")) {
       // Draft metadata may be prepared before its approved cover is available.
     } else if (resource.thumbnailUrl.startsWith("/")) {
       if (resource.thumbnailUrl.startsWith("//") || resource.thumbnailUrl.includes("..") || resource.thumbnailUrl.includes("\\")) {

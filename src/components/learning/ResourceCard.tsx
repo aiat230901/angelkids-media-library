@@ -12,6 +12,7 @@ type Props = { resource: PublicResource; href?: string; onOpen?: () => void };
 export function ResourceCard({ resource, href, onOpen }: Props) {
   const isVideo = VIDEO_FORMATS.has(resource.resourceFormat);
   const isPortrait = resource.resourceFormat === "DIGITAL_FLASHCARD_SET";
+  const isFlashcard = resource.resourceFormat === "DIGITAL_FLASHCARD_SET";
   const content = (
     <>
       <span className={`resource-thumb ${isPortrait ? "portrait" : "landscape"}`}>
@@ -25,6 +26,7 @@ export function ResourceCard({ resource, href, onOpen }: Props) {
         </span>
         <span className="resource-title">{resource.assetName}</span>
         {resource.curriculumUnit && <span className="resource-unit">{resource.curriculumUnit.displayLabel}</span>}
+        {isFlashcard && <span className="resource-cta">Mở flashcards</span>}
       </span>
     </>
   );
@@ -32,4 +34,3 @@ export function ResourceCard({ resource, href, onOpen }: Props) {
   if (isVideo && href) return <Link className="resource-card" href={href} aria-label={resource.assetName}>{content}</Link>;
   return <button className="resource-card resource-button" type="button" onClick={onOpen} aria-label={`Mở ${resource.assetName}`}>{content}</button>;
 }
-

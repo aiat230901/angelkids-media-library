@@ -26,7 +26,16 @@ npm run content:sync
 npm run content:sync -- --apply
 ```
 
-Dry-run là mặc định và hiển thị các field thay đổi. Nếu một thay đổi tạo/chuyển resource thành `ACTIVE`, lệnh apply yêu cầu thêm `--confirm-active`. Sync không xóa record ngoài manifest.
+Dry-run là mặc định, hiển thị các field thay đổi và summary `created`, `updated`, `unchanged`, `total`. Nếu một thay đổi tạo/chuyển resource thành `ACTIVE`, lệnh apply yêu cầu thêm `--confirm-active`. Sync không xóa record ngoài manifest. Nếu transaction lỗi, toàn bộ lần sync được rollback và không có catalog import một phần.
+
+Rollback khẩn cấp chỉ chuyển các resource `ACTIVE` có slug trong manifest hiện tại về `DRAFT`; không thay đổi record ngoài manifest hay reference data:
+
+```bash
+npm run content:rollback-draft
+npm run content:rollback-draft -- --confirm-draft
+```
+
+Lệnh không có confirmation chỉ dry-run và in phạm vi dự kiến. `--confirm-draft` thực hiện update trong một transaction rồi in số lượng trước/sau.
 
 ## Verification
 

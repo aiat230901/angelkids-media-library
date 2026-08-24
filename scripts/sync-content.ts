@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { getPrisma } from "../src/server/db";
 import { loadCatalog } from "../src/server/content";
-import { syncReferenceData, syncResources } from "../src/server/sync-catalog";
-import { diffResource } from "../src/domain/content-diff";
+import { applyCatalogTransaction } from "../src/server/catalog-release";
+import { diffResource, formatResourceDiffSummary, summarizeResourceDiffs } from "../src/domain/content-diff";
 
 const args = new Set(process.argv.slice(2));
 const apply = args.has("--apply");
@@ -32,9 +32,11 @@ const existing = new Map((await prisma.learningResource.findMany({
   status: item.status,
   sortOrder: item.sortOrder,
 }]));
-const changes = catalog.resources.map((item) => ({ item, diff: diffResource(item, existing.get(item.slug)) })).filter(({ diff }) => diff.action !== "UNCHANGED");
+const resourceDiffs = catalog.resources.map((item) => ({ item, diff: diffResource(item, existing.get(item.slug)) }));
+const changes = resourceDiffs.filter(({ diff }) => diff.action !== "UNCHANGED");
 for (const { item, diff } of changes) console.log(`${diff.action} ${item.slug}${diff.fields.length ? `: ${diff.fields.join(", ")}` : ""}`);
-console.log(`${changes.length} resource thay đổi/tạo mới; không xóa record ngoài manifest.`);
+console.log(`Resource summary: ${formatResourceDiffSummary(summarizeResourceDiffs(resourceDiffs.map(({ diff }) => diff)))}`);
+console.log("Không xóa record ngoài manifest.");
 
 if (!apply) {
   console.log("Dry run hoàn tất. Dùng --apply để ghi dữ liệu.");
@@ -45,9 +47,9 @@ if (changes.some(({ item, diff }) => item.status === "ACTIVE" && (diff.action ==
   await prisma.$disconnect();
   throw new Error("Có resource chuyển sang ACTIVE; chạy lại với --confirm-active sau khi review.");
 }
-await prisma.$transaction(async (tx) => {
-  await syncReferenceData(tx, catalog);
-  await syncResources(tx, catalog);
-});
-await prisma.$disconnect();
-console.log("Đồng bộ nội dung hoàn tất.");
+try {
+  await applyCatalogTransaction(prisma, catalog);
+  console.log("Đồng bộ nội dung hoàn tất.");
+} finally {
+  await prisma.$disconnect();
+}

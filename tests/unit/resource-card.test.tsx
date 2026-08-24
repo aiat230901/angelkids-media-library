@@ -31,5 +31,10 @@ describe("ResourceCard", () => {
     expect(onOpen).toHaveBeenCalledOnce();
     expect(screen.queryByLabelText("Phát video")).not.toBeInTheDocument();
   });
-});
 
+  test("gives a digital flashcard a clear open CTA", () => {
+    render(<ResourceCard resource={{ ...resource, provider: "HEYZINE", resourceFormat: "DIGITAL_FLASHCARD_SET" }} onOpen={() => undefined} />);
+
+    expect(screen.getByRole("button", { name: /Mia's Happy Classroom/i })).toHaveTextContent("Mở flashcards");
+  });
+});

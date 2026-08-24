@@ -39,10 +39,16 @@ function readYouTubeId(url: URL): string | null {
   return candidate && /^[\w-]{11}$/.test(candidate) ? candidate : null;
 }
 
+export function toYouTubeThumbnailUrl(value: string): string {
+  const url = parseHttps(value);
+  const id = url && YOUTUBE_HOSTS.has(url.hostname) ? readYouTubeId(url) : null;
+  if (!id) throw new Error("Invalid YouTube URL.");
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}
+
 export function toYouTubeEmbedUrl(value: string): string {
   const url = parseHttps(value);
   const id = url && YOUTUBE_HOSTS.has(url.hostname) ? readYouTubeId(url) : null;
   if (!id) throw new Error("URL YouTube không hợp lệ.");
   return `https://www.youtube-nocookie.com/embed/${id}`;
 }
-

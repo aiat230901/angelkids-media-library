@@ -9,20 +9,21 @@ type Props = {
   curriculumUnits: PublicCurriculumUnit[];
   onChange: (value: ResourceFilterState) => void;
   onReset: () => void;
+  showNameFilter?: boolean;
 };
 
-export function ResourceFilters({ value, levels, curriculumUnits, onChange, onReset }: Props) {
+export function ResourceFilters({ value, levels, curriculumUnits, onChange, onReset, showNameFilter = true }: Props) {
   return (
-    <div className="filters" role="search" aria-label="Bộ lọc học liệu">
+    <div className={`filters${showNameFilter ? "" : " compact"}`} role="search" aria-label="Bộ lọc học liệu">
       {levels.length > 0 && <label className="field">Level
         <select value={value.levelCode} onChange={(event) => onChange({ ...value, levelCode: event.target.value })}>
           <option value="">Tất cả Level</option>
           {levels.map((level) => <option key={level.code} value={level.code}>{level.name}</option>)}
         </select>
       </label>}
-      <label className="field">Tên học liệu
+      {showNameFilter && <label className="field">Tên học liệu
         <input type="search" value={value.query} placeholder="Tìm tên học liệu..." onChange={(event) => onChange({ ...value, query: event.target.value })} />
-      </label>
+      </label>}
       {curriculumUnits.length > 0 && <label className="field">Curriculum Unit
         <select value={value.curriculumUnitId} onChange={(event) => onChange({ ...value, curriculumUnitId: event.target.value })}>
           <option value="">Tất cả Curriculum Unit</option>
@@ -33,4 +34,3 @@ export function ResourceFilters({ value, levels, curriculumUnits, onChange, onRe
     </div>
   );
 }
-

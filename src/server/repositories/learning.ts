@@ -1,6 +1,6 @@
 import { Provider, ResourceFormat, Status } from "@/generated/prisma/client";
 import type { PublicResource } from "@/domain/public-resource";
-import { validateProviderUrl } from "@/server/providers/urls";
+import { toYouTubeThumbnailUrl, validateProviderUrl } from "@/server/providers/urls";
 import { getPrisma } from "@/server/db";
 
 export async function listCategories() {
@@ -33,10 +33,12 @@ export async function listResources(scope: ResourceScope): Promise<PublicResourc
     orderBy: [{ sortOrder: "asc" }, { assetName: "asc" }],
   });
 
-  const heyzineHosts = (process.env.HEYZINE_ALLOWED_HOSTS ?? "heyzine.com").split(",").map((host) => host.trim()).filter(Boolean);
+  const heyzineHosts = (process.env.HEYZINE_ALLOWED_HOSTS ?? "heyzine.com,mamnonangelkids.aflip.in").split(",").map((host) => host.trim()).filter(Boolean);
   return records.flatMap((record): PublicResource[] => {
-    if (!record.thumbnailUrl || !validateProviderUrl(record.provider, record.externalUrl, heyzineHosts).success) return [];
+    if (!validateProviderUrl(record.provider, record.externalUrl, heyzineHosts).success) return [];
     if (record.resourceFormat !== ResourceFormat.PRINT_AND_PLAY_COLLECTION && record.levels.length === 0) return [];
+    const thumbnailUrl = record.thumbnailUrl || (record.provider === Provider.YOUTUBE ? toYouTubeThumbnailUrl(record.externalUrl) : null);
+    if (!thumbnailUrl) return [];
     return [{
       slug: record.slug,
       assetName: record.assetName,
@@ -44,7 +46,7 @@ export async function listResources(scope: ResourceScope): Promise<PublicResourc
       resourceFormat: record.resourceFormat,
       provider: record.provider,
       externalUrl: record.externalUrl,
-      thumbnailUrl: record.thumbnailUrl,
+      thumbnailUrl,
       altText: record.altText,
       levels: record.levels.map(({ level }) => ({ code: level.code, name: level.name, sortOrder: level.sortOrder })).sort((a, b) => a.sortOrder - b.sortOrder),
       curriculumUnit: record.curriculumUnit ? {
@@ -60,4 +62,3 @@ export async function listResources(scope: ResourceScope): Promise<PublicResourc
 export async function getVideoResource(scope: ResourceScope, slug: string): Promise<PublicResource | null> {
   return (await listResources(scope)).find((resource) => resource.slug === slug && resource.provider === Provider.YOUTUBE) ?? null;
 }
-
