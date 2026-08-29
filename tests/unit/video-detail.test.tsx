@@ -12,5 +12,7 @@ describe("VideoDetail", () => {
     expect(screen.getByTitle("Hello")).toHaveAttribute("src", "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ");
     expect(screen.getByRole("link", { name: /Quay lại Songs/i })).toHaveAttribute("href", "/learning/songs");
     expect(screen.queryByRole("link", { name: /Mở trên YouTube/i })).not.toBeInTheDocument();
+    expect(screen.getByText("Độ tuổi")).toBeInTheDocument();
+    expect(screen.getByText("3–4 tuổi")).toBeInTheDocument();
   });
 });

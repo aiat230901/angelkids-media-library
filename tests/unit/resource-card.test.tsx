@@ -22,6 +22,7 @@ describe("ResourceCard", () => {
     render(<ResourceCard resource={resource} href="/learning/watch/stories/mia" />);
     expect(screen.getByRole("link", { name: /Mia's Happy Classroom/i })).toHaveAttribute("href", "/learning/watch/stories/mia");
     expect(screen.getByLabelText("Phát video")).toBeInTheDocument();
+    expect(screen.getByText("3–4 tuổi")).toBeInTheDocument();
   });
 
   test("renders a flipbook as a button without a play indicator", async () => {

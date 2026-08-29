@@ -2,7 +2,7 @@
   "categories": [
     { "slug": "watch", "name": "Watch", "description": "Xem những câu chuyện và hội thoại sinh động.", "illustrationUrl": "/illustrations/watch.png", "sortOrder": 10, "status": "ACTIVE" },
     { "slug": "read", "name": "Read", "description": "Lật mở sách, nghe và đọc theo từng trang.", "illustrationUrl": "/illustrations/read.png", "sortOrder": 20, "status": "ACTIVE" },
-    { "slug": "songs", "name": "Songs", "description": "Học từ và câu mới qua những giai điệu vui.", "illustrationUrl": "/illustrations/songs.png", "sortOrder": 30, "status": "ACTIVE" },
+    { "slug": "songs", "name": "Songs & Poems", "description": "Học từ và câu mới qua những giai điệu vui.", "illustrationUrl": "/illustrations/songs.png", "sortOrder": 30, "status": "ACTIVE" },
     { "slug": "digital-flashcards", "name": "Digital Flashcards", "description": "Nhìn hình, nghe từ và luyện tập thật dễ dàng.", "illustrationUrl": "/illustrations/digital-flashcards.png", "sortOrder": 40, "status": "ACTIVE" },
     { "slug": "print-and-plays", "name": "Print and Plays", "description": "Tải học liệu, in ra và cùng con học qua trò chơi.", "illustrationUrl": "/illustrations/print-and-plays.png", "sortOrder": 50, "status": "ACTIVE" }
   ],

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Play } from "lucide-react";
+import { getLevelDisplayName } from "@/domain/level-display";
 import type { PublicResource } from "@/domain/public-resource";
 
 const VIDEO_FORMATS = new Set([
@@ -21,7 +22,7 @@ export function ResourceCard({ resource, href, onOpen }: Props) {
       </span>
       <span className="resource-copy">
         <span className="meta-row">
-          {resource.levels.map((level) => <span className="badge" key={level.code}>{level.name}</span>)}
+          {resource.levels.map((level) => <span className="badge" key={level.code}>{getLevelDisplayName(level)}</span>)}
           {resource.curriculumUnit && <span className="badge unit">Tháng {resource.curriculumUnit.monthNumber}</span>}
         </span>
         <span className="resource-title">{resource.assetName}</span>

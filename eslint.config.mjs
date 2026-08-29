@@ -5,5 +5,5 @@ import nextTypescript from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTypescript,
-  globalIgnores([".next/**", "coverage/**", "src/generated/prisma/**", ".tmp-chrome-check/**"]),
+  globalIgnores([".next/**", ".worktrees/**", "coverage/**", "src/generated/prisma/**", ".tmp-chrome-check/**"]),
 ]);

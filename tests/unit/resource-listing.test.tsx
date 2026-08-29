@@ -35,20 +35,22 @@ describe("ResourceListing", () => {
   test("filters by visible labels and reset restores all resources", async () => {
     render(<ResourceListing resources={resources} detailBasePath="/learning/songs" />);
     expect(screen.getByText("2 học liệu")).toBeInTheDocument();
-    await userEvent.selectOptions(screen.getByLabelText("Level"), "L3");
+    expect(screen.getByLabelText("Độ tuổi")).toHaveDisplayValue("Tất cả độ tuổi");
+    expect(screen.getByRole("option", { name: "3–4 tuổi" })).toHaveValue("L3");
+    await userEvent.selectOptions(screen.getByLabelText("Độ tuổi"), "L3");
     await userEvent.type(screen.getByLabelText("Tên học liệu"), "family");
     expect(screen.getByText("Không tìm thấy học liệu phù hợp")).toBeInTheDocument();
     await userEvent.click(screen.getAllByRole("button", { name: "Đặt lại bộ lọc" })[0]);
     expect(screen.getByText("2 học liệu")).toBeInTheDocument();
   });
 
-  test("always shows name search and hides a Curriculum Unit select with no options", () => {
+  test("always shows name search and hides a month-and-topic select with no options", () => {
     render(<ResourceListing resources={[resources[1]]} detailBasePath="/learning/songs" />);
     expect(screen.getByLabelText("Tên học liệu")).toBeInTheDocument();
-    expect(screen.queryByLabelText("Curriculum Unit")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Tháng & Chủ đề học")).not.toBeInTheDocument();
   });
 
-  test("hides resource-name search but retains Level and Curriculum Unit filtering for flashcards", async () => {
+  test("hides resource-name search but retains age and month-topic filtering for flashcards", async () => {
     const user = userEvent.setup();
     const flashcards: PublicResource[] = [
       {
@@ -73,10 +75,10 @@ describe("ResourceListing", () => {
     render(<ResourceListing resources={flashcards} showNameFilter={false} />);
 
     expect(screen.queryByLabelText("Tên học liệu")).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Level")).toBeInTheDocument();
-    expect(screen.getByLabelText("Curriculum Unit")).toBeInTheDocument();
+    expect(screen.getByLabelText("Độ tuổi")).toBeInTheDocument();
+    expect(screen.getByLabelText("Tháng & Chủ đề học")).toHaveDisplayValue("Tất cả tháng & chủ đề");
 
-    await user.selectOptions(screen.getByLabelText("Level"), "L3");
+    await user.selectOptions(screen.getByLabelText("Độ tuổi"), "L3");
     expect(screen.getByText("Digital Flashcards - Level 3")).toBeInTheDocument();
     expect(screen.queryByText("Digital Flashcards - Level 4")).not.toBeInTheDocument();
   });

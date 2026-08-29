@@ -16,6 +16,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SongDetail({ params }: Props) {
   const resource = await getVideoResource(scope, (await params).slug);
   if (!resource) notFound();
-  return <main className="page-shell"><Breadcrumb items={[{ label: "Home", href: "/learning" }, { label: "Songs", href: "/learning/songs" }, { label: resource.assetName }]} /><VideoDetail resource={resource} backHref="/learning/songs" backLabel="Songs" /></main>;
+  return <main className="page-shell"><Breadcrumb items={[{ label: "Home", href: "/learning" }, { label: "Songs & Poems", href: "/learning/songs" }, { label: resource.assetName }]} /><VideoDetail resource={resource} backHref="/learning/songs" backLabel="Songs & Poems" /></main>;
 }
-

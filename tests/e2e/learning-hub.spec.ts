@@ -19,6 +19,29 @@ test("narrow viewport has no horizontal page overflow", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });
 
+test("flashcard filters use a contained hybrid mobile layout", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/learning/digital-flashcards");
+
+  const ageFilter = page.getByLabel("Độ tuổi");
+  const topicFilter = page.getByLabel("Tháng & Chủ đề học");
+  const reset = page.getByRole("button", { name: "Đặt lại bộ lọc" });
+  const narrow = await Promise.all([ageFilter, topicFilter, reset].map((control) => control.boundingBox()));
+
+  expect(narrow.every(Boolean)).toBe(true);
+  expect(narrow[1]!.y).toBeGreaterThan(narrow[0]!.y);
+  expect(narrow[2]!.y).toBeGreaterThan(narrow[1]!.y);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+
+  await page.setViewportSize({ width: 440, height: 956 });
+  const wide = await Promise.all([ageFilter, topicFilter, reset].map((control) => control.boundingBox()));
+
+  expect(wide.every(Boolean)).toBe(true);
+  expect(Math.abs(wide[0]!.y - wide[1]!.y)).toBeLessThan(2);
+  expect(wide[2]!.y).toBeGreaterThan(wide[0]!.y);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+});
+
 test("Watch keeps its copy on tablet and hides only its description on mobile", async ({ page }) => {
   const watch = page.getByRole("link", { name: /Watch/ }).first();
 
@@ -52,7 +75,7 @@ for (const [path, heading] of [
   ["/learning/watch/dialogues", "Animated Dialogues"],
   ["/learning/read/storybooks", "Digital Storybooks"],
   ["/learning/read/dialogue-books", "Digital Dialogue Books"],
-  ["/learning/songs", "Songs"],
+  ["/learning/songs", "Songs & Poems"],
   ["/learning/digital-flashcards", "Digital Flashcards"],
   ["/learning/print-and-plays", "Print and Plays"],
 ] as const) {
