@@ -20,7 +20,7 @@ The sync does not delete records outside the manifest. Keep the command output w
 
 ## Smoke test
 
-Confirm the home page loads, each catalog category is reachable, a representative resource opens for every provider, and the catalog count is 30 active resources. Check deployment logs for startup or database errors.
+Confirm the home page loads, each catalog category is reachable, a representative resource opens for every provider, and the catalog count is 33 active resources. Check deployment logs for startup or database errors.
 
 ## Rollback
 

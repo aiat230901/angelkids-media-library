@@ -4,19 +4,35 @@ import { toYouTubeThumbnailUrl, validateProviderUrl } from "@/server/providers/u
 import { getPrisma } from "@/server/db";
 
 export async function listCategories() {
+  if (process.env.NODE_ENV === "development") {
+    const catalog = await (await import("../catalog-preview")).loadPreviewCatalog();
+    return catalog.navigation.categories.filter((item) => item.status === "ACTIVE")
+      .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name))
+      .map((item) => ({ ...item, id: item.slug }));
+  }
   return getPrisma().category.findMany({ where: { status: Status.ACTIVE }, orderBy: [{ sortOrder: "asc" }, { name: "asc" }] });
 }
 
 export async function listContentTypes(categorySlug: string) {
+  if (process.env.NODE_ENV === "development") {
+    const catalog = await (await import("../catalog-preview")).loadPreviewCatalog();
+    return catalog.navigation.contentTypes.filter((item) => item.categorySlug === categorySlug && item.status === "ACTIVE"
+      && catalog.navigation.categories.some((category) => category.slug === categorySlug && category.status === "ACTIVE"))
+      .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name))
+      .map((item) => ({ ...item, id: `${categorySlug}/${item.slug}` }));
+  }
   return getPrisma().contentType.findMany({
     where: { status: Status.ACTIVE, category: { slug: categorySlug, status: Status.ACTIVE } },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
   });
 }
 
-type ResourceScope = { categorySlug: string; contentTypeSlug?: string; formats?: ResourceFormat[] };
+export type ResourceScope = { categorySlug: string; contentTypeSlug?: string; formats?: ResourceFormat[] };
 
 export async function listResources(scope: ResourceScope): Promise<PublicResource[]> {
+  if (process.env.NODE_ENV === "development") {
+    return (await import("../catalog-preview")).loadResourcesPreview(scope);
+  }
   const records = await getPrisma().learningResource.findMany({
     where: {
       status: Status.ACTIVE,

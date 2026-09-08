@@ -83,6 +83,36 @@ describe("ResourceListing", () => {
     expect(screen.queryByText("Digital Flashcards - Level 4")).not.toBeInTheDocument();
   });
 
+  test("shows and filters the under-three age band as L12", async () => {
+    const user = userEvent.setup();
+    const flashcards: PublicResource[] = [
+      {
+        ...resources[0],
+        slug: "flashcards-level-1-2",
+        assetName: "Digital Flashcards - Level 1–2",
+        resourceFormat: "DIGITAL_FLASHCARD_SET",
+        provider: "HEYZINE",
+        externalUrl: "https://mamnonangelkids.aflip.in/0713f88e66.html",
+        levels: [{ code: "L12", name: "Level 1–2", sortOrder: 5 }],
+      },
+      {
+        ...resources[0],
+        slug: "flashcards-level-3",
+        assetName: "Digital Flashcards - Level 3",
+        resourceFormat: "DIGITAL_FLASHCARD_SET",
+        provider: "HEYZINE",
+        externalUrl: "https://mamnonangelkids.aflip.in/f3a24696c0.html",
+      },
+    ];
+
+    render(<ResourceListing resources={flashcards} showNameFilter={false} />);
+
+    expect(screen.getByRole("option", { name: "Dưới 3 tuổi" })).toHaveValue("L12");
+    await user.selectOptions(screen.getByLabelText("Độ tuổi"), "L12");
+    expect(screen.getByText("Digital Flashcards - Level 1–2")).toBeInTheDocument();
+    expect(screen.queryByText("Digital Flashcards - Level 3")).not.toBeInTheDocument();
+  });
+
   test("returns focus to the flashcard that opened the reader", async () => {
     const user = userEvent.setup();
     const flashcard: PublicResource = {

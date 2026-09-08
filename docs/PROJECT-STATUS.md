@@ -4,9 +4,9 @@ Last verified: 2026-08-28.
 
 - Production deploy source: Git branch `feature/mvp-foundation`.
 - Release commit: `6c39e19` (`feat: prepare Angel Kids catalog release`).
-- Catalog manifest and production release target: 30 unique resources, all `ACTIVE`.
+- Catalog manifest and production release target: 33 unique resources, all `ACTIVE`.
 - Production PostgreSQL is operating. External database access remains closed except for a time-limited, IP-restricted import window.
-- Content split: Watch 11, Read 8, Songs & Poems 7, Digital Flashcards 3, Print-and-plays 1.
+- Content split: Watch 11, Read 8, Songs & Poems 9, Digital Flashcards 4, Print-and-plays 1.
 
 ## Verification
 

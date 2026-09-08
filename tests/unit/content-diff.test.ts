@@ -27,10 +27,10 @@ describe("content dry-run diff", () => {
 
   test("reports the expected clean-import and post-import release summaries", () => {
     expect(formatResourceDiffSummary(summarizeResourceDiffs(
-      Array.from({ length: 30 }, () => ({ action: "CREATE" as const })),
-    ))).toBe("created=30, updated=0, unchanged=0, total=30");
+      Array.from({ length: 33 }, () => ({ action: "CREATE" as const })),
+    ))).toBe("created=33, updated=0, unchanged=0, total=33");
     expect(formatResourceDiffSummary(summarizeResourceDiffs(
-      Array.from({ length: 30 }, () => ({ action: "UNCHANGED" as const })),
-    ))).toBe("created=0, updated=0, unchanged=30, total=30");
+      Array.from({ length: 33 }, () => ({ action: "UNCHANGED" as const })),
+    ))).toBe("created=0, updated=0, unchanged=33, total=33");
   });
 });

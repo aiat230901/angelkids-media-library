@@ -1,4 +1,5 @@
 const AGE_RANGES: Record<string, string> = {
+  L12: "Dưới 3 tuổi",
   L3: "3–4 tuổi",
   L4: "4–5 tuổi",
   L5: "5–6 tuổi",

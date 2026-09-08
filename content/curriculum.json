@@ -1,5 +1,6 @@
 {
   "levels": [
+    { "code": "L12", "name": "Level 1–2", "ageRange": "Dưới 3 tuổi", "sortOrder": 5, "status": "ACTIVE" },
     { "code": "L3", "name": "Level 3", "ageRange": "3-4 tuổi", "sortOrder": 10, "status": "ACTIVE" },
     { "code": "L4", "name": "Level 4", "ageRange": "4-5 tuổi", "sortOrder": 20, "status": "ACTIVE" },
     { "code": "L5", "name": "Level 5", "ageRange": "5-6 tuổi", "sortOrder": 30, "status": "ACTIVE" }

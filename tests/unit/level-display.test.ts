@@ -3,6 +3,7 @@ import { getLevelDisplayName } from "@/domain/level-display";
 
 describe("getLevelDisplayName", () => {
   test("shows parent-friendly age ranges for the supported level codes", () => {
+    expect(getLevelDisplayName({ code: "L12", name: "Level 1–2" })).toBe("Dưới 3 tuổi");
     expect(getLevelDisplayName({ code: "L3", name: "Level 3" })).toBe("3–4 tuổi");
     expect(getLevelDisplayName({ code: "L4", name: "Level 4" })).toBe("4–5 tuổi");
     expect(getLevelDisplayName({ code: "L5", name: "Level 5" })).toBe("5–6 tuổi");
