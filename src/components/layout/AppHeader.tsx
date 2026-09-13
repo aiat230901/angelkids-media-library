@@ -4,14 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Home, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
 const menuItems = [
   { label: "Trang chủ", href: "/learning" },
-  { label: "Watch", href: "/learning/watch" },
-  { label: "Read", href: "/learning/read" },
-  { label: "Songs & Poems", href: "/learning/songs" },
-  { label: "Digital Flashcards", href: "/learning/digital-flashcards" },
-  { label: "Print and Plays", href: "/learning/print-and-plays" },
+  { label: "Luyện xem", href: "/learning/watch" },
+  { label: "Tập đọc", href: "/learning/read" },
+  { label: "Bài hát & Thơ", href: "/learning/songs" },
+  { label: "Thẻ học tập", href: "/learning/digital-flashcards" },
+  { label: "Tài liệu in & Chơi cùng con", href: "/learning/print-and-plays" },
 ];
 
 export function AppHeader() {

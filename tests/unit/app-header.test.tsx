@@ -17,11 +17,11 @@ test("opens an accessible learning navigation menu with every public route", asy
   expect(screen.getByRole("banner")).not.toContainElement(dialog);
   for (const [name, href] of [
     ["Trang chủ", "/learning"],
-    ["Watch", "/learning/watch"],
-    ["Read", "/learning/read"],
-    ["Songs & Poems", "/learning/songs"],
-    ["Digital Flashcards", "/learning/digital-flashcards"],
-    ["Print and Plays", "/learning/print-and-plays"],
+    ["Luyện xem", "/learning/watch"],
+    ["Tập đọc", "/learning/read"],
+    ["Bài hát & Thơ", "/learning/songs"],
+    ["Thẻ học tập", "/learning/digital-flashcards"],
+    ["Tài liệu in & Chơi cùng con", "/learning/print-and-plays"],
   ]) {
     expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
   }
@@ -42,6 +42,6 @@ test("closes the menu with Escape, its backdrop, or a selected destination", asy
   expect(screen.queryByRole("dialog", { name: "Menu điều hướng" })).not.toBeInTheDocument();
 
   await user.click(opener);
-  await user.click(screen.getByRole("link", { name: "Read" }));
+  await user.click(screen.getByRole("link", { name: "Tập đọc" }));
   expect(screen.queryByRole("dialog", { name: "Menu điều hướng" })).not.toBeInTheDocument();
 });

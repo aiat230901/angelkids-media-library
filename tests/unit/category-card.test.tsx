@@ -8,6 +8,8 @@ test("marks only an opted-in category for natural media framing", () => {
   expect(screen.getByText("Xem và khám phá")).toHaveClass("category-description");
   expect(screen.getByRole("link")).toHaveClass("watch-natural-media");
   expect(screen.getByRole("link")).toHaveClass("watch-stack-on-tablet");
+  expect(screen.getByText("– Luyện xem")).toHaveClass("learning-label-translation");
+  expect(screen.getByText("– Luyện xem").parentElement).toHaveClass("learning-label-stacked");
 });
 
 test("marks an opted-in featured card to fill media on desktop", () => {

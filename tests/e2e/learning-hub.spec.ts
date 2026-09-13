@@ -51,7 +51,7 @@ test("Watch keeps its copy on tablet and hides only its description on mobile", 
   await expect(watch.locator(".category-description")).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 800 });
-  await expect(watch.locator("strong")).toHaveText("Watch");
+  await expect(watch.locator("strong")).toHaveText("Watch – Luyện xem");
   await expect(watch.locator(".cta")).toBeVisible();
   await expect(watch.locator(".category-description")).toBeHidden();
 });
@@ -75,9 +75,9 @@ for (const [path, heading] of [
   ["/learning/watch/dialogues", "Animated Dialogues"],
   ["/learning/read/storybooks", "Digital Storybooks"],
   ["/learning/read/dialogue-books", "Digital Dialogue Books"],
-  ["/learning/songs", "Songs & Poems"],
-  ["/learning/digital-flashcards", "Digital Flashcards"],
-  ["/learning/print-and-plays", "Print and Plays"],
+  ["/learning/songs", "Songs & Poems – Bài hát & Thơ"],
+  ["/learning/digital-flashcards", "Flashcards – Thẻ học tập"],
+  ["/learning/print-and-plays", "Print and Plays – Tài liệu in & Chơi cùng con"],
 ] as const) {
   test(`${path} renders its scoped page`, async ({ page }) => {
     await page.goto(path);

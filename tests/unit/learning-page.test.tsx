@@ -24,7 +24,7 @@ test("applies the compact responsive card treatment to Read", async () => {
 test("applies the compact responsive card treatment to the remaining categories", async () => {
   render(await LearningPage());
 
-  for (const name of ["Songs", "Digital Flashcards", "Print and Plays"]) {
+  for (const name of ["Songs", "Flashcards", "Print and Plays"]) {
     expect(screen.getByRole("link", { name: new RegExp(name) })).toHaveClass("watch-natural-media", "watch-stack-on-tablet");
   }
 });
