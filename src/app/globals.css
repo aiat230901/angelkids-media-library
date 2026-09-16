@@ -76,6 +76,7 @@ h1 { margin: 0; color: var(--color-primary-dark); font-size: clamp(34px,5vw,58px
 .learning-label-translation { font-size: .64em; font-weight: 800; letter-spacing: normal; line-height: 1.35; }
 .eyebrow .learning-label-translation { font-size: inherit; }
 .category-copy .learning-label-stacked .learning-label-translation { display: block; margin-top: 6px; }
+h1 .learning-label-stacked .learning-label-translation { display: block; margin-top: 6px; }
 .navigation-overlay { overflow-y: auto; padding-block: 80px 24px; }
 .navigation-menu { min-width: 0; }
 .cta { color: var(--color-accent-pink); font-size: 15px; font-weight: 900; }

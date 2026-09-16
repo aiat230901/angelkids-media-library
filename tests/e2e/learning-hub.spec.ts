@@ -68,6 +68,13 @@ test("featured Print and Plays stays full-width at a 440px mobile viewport", asy
   expect(widths.art / widths.card).toBeGreaterThan(0.9);
 });
 
+for (const path of ["/learning/songs", "/learning/digital-flashcards", "/learning/print-and-plays"]) {
+  test(`${path} puts its Vietnamese title translation on a new line`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.locator("h1 .learning-label-translation")).toHaveCSS("display", "block");
+  });
+}
+
 for (const [path, heading] of [
   ["/learning/watch", "Xem và khám phá"],
   ["/learning/read", "Lật mở từng trang sách"],

@@ -28,3 +28,23 @@ test("applies the compact responsive card treatment to the remaining categories"
     expect(screen.getByRole("link", { name: new RegExp(name) })).toHaveClass("watch-natural-media", "watch-stack-on-tablet");
   }
 });
+
+test("uses the approved presentation descriptions for learning categories", async () => {
+  render(await LearningPage());
+
+  for (const description of [
+    "Stories & conversations – xem những câu chuyện và hội thoại sinh động.",
+    "Flip & read along – lật mở sách, nghe và đọc theo từng trang.",
+    "Learn with songs & rhymes – học từ và câu mới qua những giai điệu vui.",
+    "Look, listen & practice – cùng con xem, cùng con đọc với thẻ từ vựng.",
+    "Print & learn together – tải học liệu, in ra và cùng con học qua trò chơi.",
+  ]) {
+    expect(screen.getByText(description)).toHaveClass("category-description");
+  }
+});
+
+test("uses the approved CTA on each learning category card", async () => {
+  render(await LearningPage());
+
+  expect(screen.getAllByText("Play")).toHaveLength(5);
+});

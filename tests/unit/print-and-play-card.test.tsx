@@ -21,5 +21,6 @@ test("shows the collection title and curriculum unit, and opens Drive in a new t
 
   expect(screen.getByText("Print and Play")).toBeInTheDocument();
   expect(screen.getByText("09 - Trường học | Chào năm học mới")).toBeInTheDocument();
+  expect(screen.getByText("Play →")).toHaveClass("cta");
   expect(screen.getByRole("link", { name: /xem học liệu 09/i })).toHaveAttribute("target", "_blank");
 });
