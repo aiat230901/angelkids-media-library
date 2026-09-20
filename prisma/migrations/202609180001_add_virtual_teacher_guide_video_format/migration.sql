@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "ResourceFormat" ADD VALUE 'VIRTUAL_TEACHER_GUIDE_VIDEO';

@@ -22,6 +22,17 @@ describe("resource activation matrix", () => {
     expect(validateResourceRule(story).success).toBe(true);
   });
 
+  test("accepts a Virtual Teacher Guide video in its own Watch content type", () => {
+    const result = validateResourceRule({
+      ...story,
+      slug: "virtual-teacher-guide-01",
+      categorySlug: "watch",
+      contentTypeSlug: "virtual-teacher-guide",
+      resourceFormat: "VIRTUAL_TEACHER_GUIDE_VIDEO" as const,
+    });
+    expect(result.success).toBe(true);
+  });
+
   test("rejects a story assigned to the wrong content type", () => {
     const result = validateResourceRule({ ...story, contentTypeSlug: "dialogues" });
     expect(result.success).toBe(false);

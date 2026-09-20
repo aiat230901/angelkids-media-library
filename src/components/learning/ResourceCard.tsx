@@ -4,14 +4,10 @@ import { Play } from "lucide-react";
 import { getLevelDisplayName } from "@/domain/level-display";
 import type { PublicResource } from "@/domain/public-resource";
 
-const VIDEO_FORMATS = new Set([
-  "ANIMATED_STORY_VIDEO", "ANIMATED_DIALOGUE_VIDEO", "LEARNING_SONG_VIDEO", "SCHOOL_SONG_VIDEO",
-]);
-
 type Props = { resource: PublicResource; href?: string; onOpen?: () => void };
 
 export function ResourceCard({ resource, href, onOpen }: Props) {
-  const isVideo = VIDEO_FORMATS.has(resource.resourceFormat);
+  const isVideo = resource.provider === "YOUTUBE";
   const isPortrait = resource.resourceFormat === "DIGITAL_FLASHCARD_SET";
   const isFlashcard = resource.resourceFormat === "DIGITAL_FLASHCARD_SET";
   const content = (

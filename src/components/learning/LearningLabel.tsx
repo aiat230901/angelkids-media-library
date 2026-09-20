@@ -4,9 +4,10 @@ const labels: Record<string, { english: string; vietnamese: string; stacked?: bo
   Read: { english: "Read", vietnamese: "Tập đọc", stacked: true },
   "Songs & Poems": { english: "Songs & Poems", vietnamese: "Bài hát & Thơ", stacked: true },
   "Digital Flashcards": { english: "Flashcards", vietnamese: "Thẻ học tập", stacked: true },
-  "Print and Plays": { english: "Print and Plays", vietnamese: "Tài liệu in & Chơi cùng con", stacked: true },
+  "Print and Plays": { english: "Print and Play", vietnamese: "Tài liệu in & Chơi cùng con", stacked: true },
   Stories: { english: "Stories", vietnamese: "Truyện kể", stacked: true },
   Dialogues: { english: "Dialogues", vietnamese: "Hội thoại", stacked: true },
+  "Virtual Teacher Guide": { english: "Virtual Teacher Guide", vietnamese: "Hướng dẫn bài học", stacked: true },
   Storybooks: { english: "Storybooks", vietnamese: "Sách truyện", stacked: true },
   "Dialogue Books": { english: "Dialogue Books", vietnamese: "Sách hội thoại", stacked: true },
 };

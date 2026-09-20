@@ -9,6 +9,7 @@
   "contentTypes": [
     { "categorySlug": "watch", "slug": "stories", "name": "Stories", "description": "Những câu chuyện hoạt hình có cốt truyện và lời kể.", "illustrationUrl": "/illustrations/stories.png", "sortOrder": 10, "status": "ACTIVE" },
     { "categorySlug": "watch", "slug": "dialogues", "name": "Dialogues", "description": "Hội thoại gần gũi giúp con làm quen mẫu câu.", "illustrationUrl": "/illustrations/dialogues.png", "sortOrder": 20, "status": "ACTIVE" },
+    { "categorySlug": "watch", "slug": "virtual-teacher-guide", "name": "Virtual Teacher Guide", "description": "Giáo viên ảo hướng dẫn bé khám phá nội dung và thực hành ngôn ngữ qua từng tình huống.", "illustrationUrl": "/illustrations/virtual-teacher-guide.png", "sortOrder": 30, "status": "ACTIVE" },
     { "categorySlug": "read", "slug": "storybooks", "name": "Storybooks", "description": "Truyện kỹ thuật số có audio kể chuyện.", "illustrationUrl": "/illustrations/storybooks.png", "sortOrder": 10, "status": "ACTIVE" },
     { "categorySlug": "read", "slug": "dialogue-books", "name": "Dialogue Books", "description": "Sách hội thoại có audio giúp con nghe và đọc theo.", "illustrationUrl": "/illustrations/dialogue-books.png", "sortOrder": 20, "status": "ACTIVE" }
   ]

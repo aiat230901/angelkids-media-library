@@ -11,6 +11,7 @@ export const CATEGORY_PATHS: Record<string, string> = {
 export const CONTENT_TYPE_PATHS: Record<string, string> = {
   "watch/stories": "/learning/watch/stories",
   "watch/dialogues": "/learning/watch/dialogues",
+  "watch/virtual-teacher-guide": "/learning/watch/virtual-teacher-guide",
   "read/storybooks": "/learning/read/storybooks",
   "read/dialogue-books": "/learning/read/dialogue-books",
 };
@@ -30,6 +31,7 @@ export function getContentTypePath(categorySlug: string, contentTypeSlug: string
 export const WATCH_LISTINGS = {
   stories: { title: "Animated Stories", lead: "Chọn một câu chuyện để cùng xem và lắng nghe.", format: ResourceFormat.ANIMATED_STORY_VIDEO },
   dialogues: { title: "Animated Dialogues", lead: "Chọn một hội thoại để con nghe và làm quen với mẫu câu.", format: ResourceFormat.ANIMATED_DIALOGUE_VIDEO },
+  "virtual-teacher-guide": { title: "Virtual Teacher Guide", lead: "Giáo viên ảo hướng dẫn bé khám phá nội dung và thực hành ngôn ngữ qua từng tình huống.", format: ResourceFormat.VIRTUAL_TEACHER_GUIDE_VIDEO },
 } as const;
 
 export const READ_LISTINGS = {

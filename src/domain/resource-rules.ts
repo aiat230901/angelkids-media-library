@@ -21,6 +21,7 @@ type Rule = { category: string; contentType: string | null; provider: Provider; 
 const RULES: Record<ResourceFormat, Rule> = {
   ANIMATED_STORY_VIDEO: { category: "watch", contentType: "stories", provider: "YOUTUBE" },
   ANIMATED_DIALOGUE_VIDEO: { category: "watch", contentType: "dialogues", provider: "YOUTUBE" },
+  VIRTUAL_TEACHER_GUIDE_VIDEO: { category: "watch", contentType: "virtual-teacher-guide", provider: "YOUTUBE" },
   LEARNING_SONG_VIDEO: { category: "songs", contentType: null, provider: "YOUTUBE" },
   SCHOOL_SONG_VIDEO: { category: "songs", contentType: null, provider: "YOUTUBE", unitOptional: true },
   DIGITAL_STORYBOOK: { category: "read", contentType: "storybooks", provider: "HEYZINE" },

@@ -12,6 +12,7 @@ const navigation = {
   contentTypes: [
     { categorySlug: "watch", slug: "stories", name: "Stories", description: "Truyện", illustrationUrl: "/illustrations/stories.svg", sortOrder: 10, status: "ACTIVE" },
     { categorySlug: "watch", slug: "dialogues", name: "Dialogues", description: "Hội thoại", illustrationUrl: "/illustrations/dialogues.svg", sortOrder: 20, status: "ACTIVE" },
+    { categorySlug: "watch", slug: "virtual-teacher-guide", name: "Virtual Teacher Guide", description: "Hướng dẫn bài học", illustrationUrl: "/illustrations/virtual-teacher-guide.png", sortOrder: 30, status: "ACTIVE" },
     { categorySlug: "read", slug: "storybooks", name: "Storybooks", description: "Truyện", illustrationUrl: "/illustrations/read.svg", sortOrder: 10, status: "ACTIVE" },
     { categorySlug: "read", slug: "dialogue-books", name: "Dialogue Books", description: "Hội thoại", illustrationUrl: "/illustrations/read.svg", sortOrder: 20, status: "ACTIVE" },
   ],

@@ -18,6 +18,13 @@ const resource: PublicResource = {
 };
 
 describe("ResourceCard", () => {
+  test("routes a Virtual Teacher Guide to its video detail instead of the flipbook reader", () => {
+    const href = "/learning/watch/virtual-teacher-guide/my-body-can-talk";
+    render(<ResourceCard resource={{ ...resource, resourceFormat: "VIRTUAL_TEACHER_GUIDE_VIDEO" }} href={href} />);
+    expect(screen.getByRole("link", { name: resource.assetName })).toHaveAttribute("href", href);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
   test("renders a video as a detail link with a play label", () => {
     render(<ResourceCard resource={resource} href="/learning/watch/stories/mia" />);
     expect(screen.getByRole("link", { name: /Mia's Happy Classroom/i })).toHaveAttribute("href", "/learning/watch/stories/mia");

@@ -52,7 +52,7 @@ const resourceSchema = z.object({
   curriculumUnitKey: slug.nullable(),
   provider: z.enum(["YOUTUBE", "HEYZINE", "GOOGLE_DRIVE"]),
   resourceFormat: z.enum([
-    "ANIMATED_STORY_VIDEO", "ANIMATED_DIALOGUE_VIDEO", "LEARNING_SONG_VIDEO", "SCHOOL_SONG_VIDEO",
+    "ANIMATED_STORY_VIDEO", "ANIMATED_DIALOGUE_VIDEO", "VIRTUAL_TEACHER_GUIDE_VIDEO", "LEARNING_SONG_VIDEO", "SCHOOL_SONG_VIDEO",
     "DIGITAL_STORYBOOK", "DIGITAL_DIALOGUE_BOOK", "DIGITAL_FLASHCARD_SET", "PRINT_AND_PLAY_COLLECTION",
   ]),
   externalUrl: z.string().min(1),
@@ -65,7 +65,7 @@ const resourceSchema = z.object({
 
 const resourcesSchema = z.object({ resources: z.array(resourceSchema) });
 const REQUIRED_CATEGORIES = ["watch", "read", "songs", "digital-flashcards", "print-and-plays"];
-const REQUIRED_CONTENT_TYPES = ["watch/stories", "watch/dialogues", "read/storybooks", "read/dialogue-books"];
+const REQUIRED_CONTENT_TYPES = ["watch/stories", "watch/dialogues", "watch/virtual-teacher-guide", "read/storybooks", "read/dialogue-books"];
 
 export type ParsedCatalog = {
   navigation: z.infer<typeof navigationSchema>;
@@ -94,7 +94,7 @@ export function parseContentManifests(
   assertUnique(navigation.categories.map((item) => item.slug), "Category slug");
   assertUnique(navigation.contentTypes.map((item) => `${item.categorySlug}/${item.slug}`), "Content Type");
   assertExactSet(navigation.categories.map((item) => item.slug), REQUIRED_CATEGORIES, "Navigation phải có đúng 5 Category cố định.");
-  assertExactSet(navigation.contentTypes.map((item) => `${item.categorySlug}/${item.slug}`), REQUIRED_CONTENT_TYPES, "Navigation phải có đúng 4 Content Type cố định.");
+  assertExactSet(navigation.contentTypes.map((item) => `${item.categorySlug}/${item.slug}`), REQUIRED_CONTENT_TYPES, "Navigation phải có đúng 5 Content Type cố định.");
   assertUnique(curriculum.levels.map((item) => item.code), "Level code");
   assertUnique(curriculum.curriculumUnits.map((item) => item.key), "Curriculum Unit key");
   assertUnique(curriculum.curriculumUnits.map((item) => `${item.monthNumber}/${item.monthTopic}`), "Curriculum Unit Month + Topic");

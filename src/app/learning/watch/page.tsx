@@ -9,5 +9,5 @@ export const metadata: Metadata = { title: "Watch" };
 
 export default async function WatchPage() {
   const types = await listContentTypes("watch");
-  return <main className="page-shell"><Breadcrumb items={[{ label: "Home", href: "/learning" }, { label: "Watch" }]} /><PageHero eyebrow="Watch" title="Xem và khám phá" lead="Cùng con lắng nghe tiếng Anh qua những câu chuyện và hội thoại sinh động." /><section className="choice-grid">{types.map((item) => <CategoryCard key={item.id} href={getContentTypePath("watch", item.slug)} name={item.name} description={item.description} illustrationUrl={item.illustrationUrl} hideDescriptionOnMobile squareMediaOnDesktop />)}</section></main>;
+  return <main className="page-shell"><Breadcrumb items={[{ label: "Home", href: "/learning" }, { label: "Watch" }]} /><PageHero eyebrow="Watch" title="Xem và khám phá" lead="Cùng con lắng nghe tiếng Anh qua những câu chuyện và hội thoại sinh động." /><section className="choice-grid">{types.map((item) => <CategoryCard key={item.id} href={getContentTypePath("watch", item.slug)} name={item.name} description={item.description} illustrationUrl={item.illustrationUrl} hideDescriptionOnMobile squareMediaOnDesktop fillMediaOnDesktop={item.slug === "virtual-teacher-guide"} />)}</section></main>;
 }
