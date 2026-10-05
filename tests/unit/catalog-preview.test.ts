@@ -1,5 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest";
 import { listCategories, listContentTypes, listResources, getVideoResource } from "@/server/repositories/learning";
+import { filterResources, getFilterOptions } from "@/domain/resource-filters";
 
 vi.mock("@/server/db", () => ({ getPrisma: () => { throw new Error("Database path reached"); } }));
 afterEach(() => vi.unstubAllEnvs());
@@ -18,7 +19,7 @@ test("development serves every configured learning resource group", async () => 
     { categorySlug: "songs" }, { categorySlug: "digital-flashcards" }, { categorySlug: "print-and-plays" },
   ];
   const groups = await Promise.all(scopes.map(listResources));
-  expect(new Set(groups.flat().map((item) => item.slug)).size).toBe(36);
+  expect(new Set(groups.flat().map((item) => item.slug)).size).toBe(94);
   expect(groups.every((items) => items.length > 0)).toBe(true);
   expect(await getVideoResource(scopes[0], groups[0][0].slug)).toEqual(groups[0][0]);
   expect(await listResources({ categorySlug: "missing" })).toEqual([]);
@@ -26,7 +27,8 @@ test("development serves every configured learning resource group", async () => 
 
 test("development exposes the replacement songs with their filter metadata", async () => {
   vi.stubEnv("NODE_ENV", "development");
-  const songs = await listResources({ categorySlug: "songs" });
+  const songs = (await listResources({ categorySlug: "songs" }))
+    .filter((item) => item.curriculumUnit?.monthNumber === "09");
 
   expect(songs.map((item) => ({
     slug: item.slug,
@@ -55,9 +57,22 @@ test("development exposes the replacement songs with their filter metadata", asy
   })));
 });
 
+test("October songs appear in their level, name, and curriculum filters", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const songs = await listResources({ categorySlug: "songs" });
+  const october = getFilterOptions(songs).curriculumUnits.find((unit) => unit.monthNumber === "10");
+  expect(october).toBeDefined();
+  expect(filterResources(songs, { levelCode: "L12", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["this-is-me-song"]);
+  expect(filterResources(songs, { levelCode: "L3", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["i-am-unique"]);
+  expect(filterResources(songs, { levelCode: "L4", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["i-am-shining"]);
+  expect(filterResources(songs, { levelCode: "L5", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["im-unique"]);
+  expect(filterResources(songs, { levelCode: "L5", query: "unique", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["im-unique"]);
+});
+
 test("development exposes the new Virtual Teacher Guide videos with their filter metadata", async () => {
   vi.stubEnv("NODE_ENV", "development");
-  const guides = await listResources({ categorySlug: "watch", contentTypeSlug: "virtual-teacher-guide" });
+  const guides = (await listResources({ categorySlug: "watch", contentTypeSlug: "virtual-teacher-guide" }))
+    .filter((item) => item.curriculumUnit?.monthNumber === "09");
 
   expect(guides.map((item) => ({
     slug: item.slug,
@@ -80,9 +95,27 @@ test("development exposes the new Virtual Teacher Guide videos with their filter
   })));
 });
 
+test("October Virtual Teacher Guides appear in their level and curriculum filters", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const guides = await listResources({ categorySlug: "watch", contentTypeSlug: "virtual-teacher-guide" });
+  const october = getFilterOptions(guides).curriculumUnits.find((unit) => unit.displayLabel === "10 - Bản thân | Tôi khác biệt");
+  expect(october).toBeDefined();
+  expect(filterResources(guides, { levelCode: "L3", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual([
+    "my-feelings-my-gestures", "listen-and-follow-2-steps", "show-your-feelings", "follow-the-teacher",
+  ]);
+  expect(filterResources(guides, { levelCode: "L4", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual([
+    "this-is-me", "listen-to-my-friends", "draw-my-body", "share-with-friends", "i-can-talk-about-me-virtual-teacher-guide",
+  ]);
+  expect(filterResources(guides, { levelCode: "L5", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual([
+    "my-body-and-what-it-does", "about-me",
+  ]);
+  expect(filterResources(guides, { levelCode: "L4", query: "draw", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["draw-my-body"]);
+});
+
 test("development exposes the replacement stories with their filter metadata", async () => {
   vi.stubEnv("NODE_ENV", "development");
-  const stories = await listResources({ categorySlug: "watch", contentTypeSlug: "stories" });
+  const stories = (await listResources({ categorySlug: "watch", contentTypeSlug: "stories" }))
+    .filter((item) => item.curriculumUnit?.monthNumber === "09");
 
   expect(stories.map((item) => ({
     slug: item.slug,
@@ -119,9 +152,22 @@ test("development exposes the replacement stories with their filter metadata", a
   ]);
 });
 
+test("October stories appear in their level, name, and curriculum filters", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const stories = await listResources({ categorySlug: "watch", contentTypeSlug: "stories" });
+  const october = getFilterOptions(stories).curriculumUnits.find((unit) => unit.monthNumber === "10");
+  expect(october).toBeDefined();
+  expect(filterResources(stories, { levelCode: "L12", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["mia-body-says-hello"]);
+  expect(filterResources(stories, { levelCode: "L3", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["i-am-special"]);
+  expect(filterResources(stories, { levelCode: "L4", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["bins-special-picture"]);
+  expect(filterResources(stories, { levelCode: "L5", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["what-do-i-like-story", "mia-and-her-little-body-friends"]);
+  expect(filterResources(stories, { levelCode: "L5", query: "little body friends", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["mia-and-her-little-body-friends"]);
+});
+
 test("development exposes the replacement dialogues with their filter metadata", async () => {
   vi.stubEnv("NODE_ENV", "development");
-  const dialogues = await listResources({ categorySlug: "watch", contentTypeSlug: "dialogues" });
+  const dialogues = (await listResources({ categorySlug: "watch", contentTypeSlug: "dialogues" }))
+    .filter((item) => item.curriculumUnit?.monthNumber === "09");
 
   expect(dialogues.map((item) => ({
     slug: item.slug,
@@ -147,6 +193,78 @@ test("development exposes the replacement dialogues with their filter metadata",
     levelCodes,
     topic: "09 - Trường học | Chào năm học mới",
   })));
+});
+
+test("October dialogues appear with working level, name, and curriculum filters", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const dialogues = await listResources({ categorySlug: "watch", contentTypeSlug: "dialogues" });
+  const options = getFilterOptions(dialogues);
+  const october = options.curriculumUnits.find((unit) => unit.displayLabel === "10 - Bản thân | Tôi khác biệt");
+  expect(october).toBeDefined();
+  expect(options.levels.map((level) => level.code)).toContain("L3");
+  const filters = { levelCode: "L3", query: "", curriculumUnitId: october!.id };
+  expect(filterResources(dialogues, filters).map((resource) => resource.slug)).toEqual([
+    "my-name-my-age-my-gender",
+    "me-myself-and-i",
+    "what-do-i-like",
+    "my-body",
+    "all-about-mia",
+    "who-am-i-today",
+  ]);
+  expect(filterResources(dialogues, { ...filters, query: "all about mia" }).map((resource) => resource.slug)).toEqual(["all-about-mia"]);
+  expect(filterResources(dialogues, { ...filters, levelCode: "L12" })).toEqual([]);
+  expect(filterResources(dialogues, { ...filters, query: "missing name" })).toEqual([]);
+  expect(filterResources(dialogues, { ...filters, curriculumUnitId: "missing-unit" })).toEqual([]);
+});
+
+test("October Level 4 dialogues appear in their age and curriculum filters", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const dialogues = await listResources({ categorySlug: "watch", contentTypeSlug: "dialogues" });
+  const october = getFilterOptions(dialogues).curriculumUnits.find((unit) => unit.displayLabel === "10 - Bản thân | Tôi khác biệt");
+  expect(october).toBeDefined();
+  const filters = { levelCode: "L4", query: "", curriculumUnitId: october!.id };
+  expect(filterResources(dialogues, filters).map((resource) => resource.slug)).toEqual([
+    "all-about-me-questions-who-am-i",
+    "my-likes-and-feelings",
+    "show-how-i-feel",
+    "lets-get-to-know-each-other",
+    "my-ideas-and-experiences",
+    "me-and-my-family",
+  ]);
+  expect(filterResources(dialogues, { ...filters, query: "likes" }).map((resource) => resource.slug)).toEqual(["my-likes-and-feelings"]);
+});
+
+test("October Level 5 dialogues appear in their age and curriculum filters", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const dialogues = await listResources({ categorySlug: "watch", contentTypeSlug: "dialogues" });
+  const october = getFilterOptions(dialogues).curriculumUnits.find((unit) => unit.displayLabel === "10 - Bản thân | Tôi khác biệt");
+  expect(october).toBeDefined();
+  const filters = { levelCode: "L5", query: "", curriculumUnitId: october!.id };
+  expect(filterResources(dialogues, filters).map((resource) => resource.slug)).toEqual([
+    "i-can-talk-about-me",
+    "lets-talk-tom-and-mia",
+    "my-likes-and-why",
+    "my-daily-life",
+    "ask-me-about-me",
+  ]);
+  expect(filterResources(dialogues, { ...filters, query: "daily" }).map((resource) => resource.slug)).toEqual(["my-daily-life"]);
+});
+
+test("October dialogue books appear in their level, name, and curriculum filters", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const books = await listResources({ categorySlug: "read", contentTypeSlug: "dialogue-books" });
+  const october = getFilterOptions(books).curriculumUnits.find((unit) => unit.monthNumber === "10");
+  expect(october).toBeDefined();
+  expect(filterResources(books, { levelCode: "L3", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual([
+    "my-name-my-age-my-gender-dialogue-book", "me-myself-and-i-dialogue-book", "what-do-i-like-dialogue-book", "my-body-dialogue-book", "all-about-mia-dialogue-book", "who-am-i-today-dialogue-book",
+  ]);
+  expect(filterResources(books, { levelCode: "L4", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual([
+    "all-about-me-questions-who-am-i-dialogue-book", "my-likes-and-feelings-dialogue-book", "show-how-i-feel-dialogue-book", "lets-get-to-know-each-other-dialogue-book", "my-ideas-and-experiences-dialogue-book", "me-and-my-family-dialogue-book",
+  ]);
+  expect(filterResources(books, { levelCode: "L5", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual([
+    "i-can-talk-about-me-dialogue-book", "lets-talk-tom-and-mia-dialogue-book", "my-likes-and-why-dialogue-book", "my-daily-life-dialogue-book", "ask-me-about-me-dialogue-book",
+  ]);
+  expect(filterResources(books, { levelCode: "L5", query: "daily life", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["my-daily-life-dialogue-book"]);
 });
 
 test("production keeps database reads instead of silently using the manifest", async () => {
