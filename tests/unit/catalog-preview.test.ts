@@ -19,7 +19,7 @@ test("development serves every configured learning resource group", async () => 
     { categorySlug: "songs" }, { categorySlug: "digital-flashcards" }, { categorySlug: "print-and-plays" },
   ];
   const groups = await Promise.all(scopes.map(listResources));
-  expect(new Set(groups.flat().map((item) => item.slug)).size).toBe(94);
+  expect(new Set(groups.flat().map((item) => item.slug)).size).toBe(98);
   expect(groups.every((items) => items.length > 0)).toBe(true);
   expect(await getVideoResource(scopes[0], groups[0][0].slug)).toEqual(groups[0][0]);
   expect(await listResources({ categorySlug: "missing" })).toEqual([]);
@@ -62,10 +62,10 @@ test("October songs appear in their level, name, and curriculum filters", async 
   const songs = await listResources({ categorySlug: "songs" });
   const october = getFilterOptions(songs).curriculumUnits.find((unit) => unit.monthNumber === "10");
   expect(october).toBeDefined();
-  expect(filterResources(songs, { levelCode: "L12", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["this-is-me-song"]);
-  expect(filterResources(songs, { levelCode: "L3", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["i-am-unique"]);
-  expect(filterResources(songs, { levelCode: "L4", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["i-am-shining"]);
-  expect(filterResources(songs, { levelCode: "L5", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["im-unique"]);
+  expect(filterResources(songs, { levelCode: "L12", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["this-is-me-song", "me-me-me"]);
+  expect(filterResources(songs, { levelCode: "L3", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["i-am-unique", "i-see-i-see"]);
+  expect(filterResources(songs, { levelCode: "L4", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["i-am-shining", "were-same-but-different"]);
+  expect(filterResources(songs, { levelCode: "L5", query: "", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["im-unique", "happy-me"]);
   expect(filterResources(songs, { levelCode: "L5", query: "unique", curriculumUnitId: october!.id }).map((resource) => resource.slug)).toEqual(["im-unique"]);
 });
 
@@ -272,4 +272,31 @@ test("production keeps database reads instead of silently using the manifest", a
   await expect(listCategories()).rejects.toThrow("Database path reached");
   await expect(listContentTypes("watch")).rejects.toThrow("Database path reached");
   await expect(listResources({ categorySlug: "digital-flashcards" })).rejects.toThrow("Database path reached");
+});
+
+
+test("additional October songs match all three filters and open their video details", async () => {
+  vi.stubEnv("NODE_ENV", "development");
+  const songs = await listResources({ categorySlug: "songs" });
+  const october = getFilterOptions(songs).curriculumUnits.find((unit) => unit.displayLabel === "10 - Bản thân | Tôi khác biệt");
+  expect(october).toBeDefined();
+  for (const [slug, name, videoId, level] of [
+    ["me-me-me", "Poem - Me, me, me!", "cBe3ro5JAOs", "L12"],
+    ["i-see-i-see", "Poem - I see, I see", "hgQAPpGZNME", "L3"],
+    ["were-same-but-different", "Poem - We're same but different", "Rl3Kpiz1to0", "L4"],
+    ["happy-me", "Poem - Happy Me", "yHITiGFo9Hk", "L5"],
+  ]) {
+    const matches = filterResources(songs, { levelCode: level, query: name, curriculumUnitId: october!.id });
+    expect(matches.map((resource) => resource.slug)).toEqual([slug]);
+    expect(matches[0]).toMatchObject({
+      assetName: name,
+      externalUrl: `https://youtu.be/${videoId}`,
+      thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+      resourceFormat: "LEARNING_SONG_VIDEO",
+      provider: "YOUTUBE",
+      levels: [{ code: level }],
+    });
+    expect(await getVideoResource({ categorySlug: "songs" }, slug)).toEqual(matches[0]);
+    expect(filterResources(songs, { levelCode: level === "L12" ? "L3" : "L12", query: name, curriculumUnitId: october!.id })).toEqual([]);
+  }
 });

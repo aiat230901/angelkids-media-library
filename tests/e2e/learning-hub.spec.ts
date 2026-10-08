@@ -13,13 +13,13 @@ test("unknown video has a branded not-found action", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Về Learning Hub" })).toBeVisible();
 });
 
-test("Virtual Teacher Guide exposes its three videos", async ({ page }) => {
+test("Virtual Teacher Guide lists September and October videos", async ({ page }) => {
   await page.goto("/learning/watch");
   await expect(page.getByRole("link", { name: /Virtual Teacher Guide/ })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide");
 
   await page.goto("/learning/watch/virtual-teacher-guide");
   await expect(page.getByRole("heading", { name: "Virtual Teacher Guide – Hướng dẫn bài học", exact: true })).toBeVisible();
-  await expect(page.locator(".resource-count")).toHaveText("3 học liệu");
+  await expect(page.locator(".resource-count")).toHaveText("14 học liệu");
   await expect(page.getByRole("link", { name: "My Body Can Talk!" })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide/my-body-can-talk");
   await expect(page.getByRole("link", { name: "Your turn!" })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide/your-turn");
   await expect(page.getByRole("link", { name: "What Do I Want" })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide/what-do-i-want");
@@ -109,3 +109,34 @@ for (const [path, heading] of [
     await expect(page.getByRole("heading", { name: heading, exact: true }).first()).toBeVisible();
   });
 }
+
+
+test("October Poems filter by age, product name, and topic and open the correct player", async ({ page }) => {
+  for (const [slug, name, videoId, level] of [
+    ["me-me-me", "Poem - Me, me, me!", "cBe3ro5JAOs", "L12"],
+    ["i-see-i-see", "Poem - I see, I see", "hgQAPpGZNME", "L3"],
+    ["were-same-but-different", "Poem - We're same but different", "Rl3Kpiz1to0", "L4"],
+    ["happy-me", "Poem - Happy Me", "yHITiGFo9Hk", "L5"],
+  ]) {
+    await page.goto("/learning/songs");
+    await page.getByLabel("Tháng & Chủ đề học").selectOption({ label: "10 - Bản thân | Tôi khác biệt" });
+    await page.getByLabel("Độ tuổi").selectOption(level);
+    await page.getByLabel("Tên học liệu").fill(name);
+    await expect(page.locator(".resource-count")).toHaveText("1 học liệu");
+    const card = page.getByRole("link", { name, exact: true });
+    await expect(card).toHaveAttribute("href", `/learning/songs/${slug}`);
+    await card.click();
+    await expect(page.locator("iframe")).toHaveAttribute("src", `https://www.youtube-nocookie.com/embed/${videoId}`);
+  }
+});
+
+test("September and October Print and Play cards use the shared Drive destination", async ({ page }) => {
+  await page.goto("/learning/print-and-plays");
+  const cards = page.locator(".unit-card");
+  await expect(cards).toHaveCount(2);
+  for (const card of await cards.all()) {
+    await expect(card).toHaveAttribute("href", "https://drive.google.com/drive/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ?usp=drive_link");
+    await expect(card).toHaveAttribute("target", "_blank");
+    await expect(card).toHaveAttribute("rel", "noopener noreferrer");
+  }
+});

@@ -18,7 +18,7 @@ export default async function PrintAndPlaysPage() {
       <PrintAndPlayCard hideDescriptionOnMobile resource={{
         assetName: "Print and Play",
         description: "10 - Bản thân | Tôi khác biệt",
-        externalUrl: "https://drive.google.com/drive/folders/1pJlinV0vYOMjNNYH5DUkkbR7AhdHLmRt?usp=sharing",
+        externalUrl: "https://drive.google.com/drive/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ?usp=drive_link",
         thumbnailUrl: "/print-and-plays/10.png",
         altText: "Minh họa Print and Play tháng 10: Bản thân | Tôi khác biệt",
         curriculumUnit: { id: "10-ban-than", monthNumber: "10", displayLabel: "10 - Bản thân | Tôi khác biệt", sortOrder: 20 },
