@@ -23,6 +23,14 @@ export default async function PrintAndPlaysPage() {
         altText: "Minh họa Print and Play tháng 10: Bản thân | Tôi khác biệt",
         curriculumUnit: { id: "10-ban-than", monthNumber: "10", displayLabel: "10 - Bản thân | Tôi khác biệt", sortOrder: 20 },
       }} />
+      <PrintAndPlayCard hideDescriptionOnMobile resource={{
+        assetName: "Print and Play",
+        description: "11 - Nghề nghiệp | Bé tài năng",
+        externalUrl: "https://drive.google.com/drive/u/2/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ",
+        thumbnailUrl: "/print-and-plays/11.png",
+        altText: "Minh họa Print and Play tháng 11: Nghề nghiệp | Bé tài năng",
+        curriculumUnit: { id: "11-nghe-nghiep", monthNumber: "11", displayLabel: "11 - Nghề nghiệp | Bé tài năng", sortOrder: 30 },
+      }} />
     </section>
   </main>;
 }

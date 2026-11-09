@@ -15,22 +15,26 @@ Each uses the official YouTube thumbnail URL. Tests verify Level, Product Name, 
 
 ## Print and Plays
 
-Both September and October cards now open the same Google Drive folder in a new tab: `https://drive.google.com/drive/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ?usp=drive_link`. No additional Print and Play resource record is created.
+The November card opens `https://drive.google.com/drive/u/2/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ` in a new tab with the supplied illustration. No additional Print and Play resource record is created.
+
+## November catalog
+
+Added 50 ACTIVE resources under `11 - Nghề nghiệp | Bé tài năng`: Watch 24 (Dialogues 14, Virtual Teacher Guide 6, Stories 4), Read 14 Dialogue Books, Songs & Poems 8, and Digital Flashcards 4. The YouTube items use official thumbnails; Flashcards and Dialogue Books use their supplied Heyzine first-page thumbnails.
 
 ## Release target
 
-98 unique manifest resources, all ACTIVE: Watch 47, Read 25, Songs & Poems 17, Digital Flashcards 8, Print and Plays 1. September has 36 resources and October has 62. No schema or migration files are changed in this release diff.
+148 unique manifest resources, all ACTIVE: Watch 71, Read 39, Songs & Poems 25, Digital Flashcards 12, Print and Plays 1. September has 36 resources, October 62, and November 50. No schema or migration files are changed in this release diff.
 
 Production migration, deployment, catalog sync, smoke test, and tagging are still pending.
 
-## Local freeze verification — 2026-10-09
+## Local freeze verification — 2026-11-10
 
 - Lint and typecheck passed.
-- 85 unit tests and 44 browser E2E tests passed on desktop and mobile.
-- Production build and manifest validation passed.
-- Local PostgreSQL contains 98 total resources, all ACTIVE; local sync dry-run reports 98 unchanged.
+- 96 unit tests and 46 browser E2E tests passed on desktop and mobile.
+- Manifest validation, lint, and typecheck passed.
+- Local PostgreSQL contains 148 total resources, all ACTIVE; local sync dry-run reports 148 unchanged.
 - Production-mode CSP tested from local configuration includes the required reader and thumbnail hosts, omits unsafe-eval, and upgrades insecure requests. Actual Vibe environment variables and production database state remain unverified.
-- Updated the outdated Virtual Teacher Guide E2E expectation from 3 to 14 videos after verifying the October catalog. Added browser coverage for the four Poems and both Drive cards.
-- Standard local/production env files and generated directories are ignored; no tracked .env, .env.local, .env.production, .env.production.local, .pem, or .key files were found. Additional env names such as .env.staging/.env.test are not covered by the current .gitignore; stage only the reviewed release files.
+- Updated the Virtual Teacher Guide E2E expectation to 20 videos and added browser coverage for the November Drive card's desktop, tablet, and mobile layout.
+- Standard env files and generated directories are ignored, including `.env.staging` and `.env.test`; stage only the reviewed release files.
 - SESSION3-HANDOFF.md, SESSION4-HANDOFF.md, and SESSION5-HANDOFF.md are pre-existing untracked local files outside this release scope.
 - This checkpoint performs no staging, commit, push, production migration/deployment/sync, or tagging.

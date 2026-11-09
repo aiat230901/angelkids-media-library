@@ -13,13 +13,13 @@ test("unknown video has a branded not-found action", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Về Learning Hub" })).toBeVisible();
 });
 
-test("Virtual Teacher Guide lists September and October videos", async ({ page }) => {
+test("Virtual Teacher Guide lists September through November videos", async ({ page }) => {
   await page.goto("/learning/watch");
   await expect(page.getByRole("link", { name: /Virtual Teacher Guide/ })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide");
 
   await page.goto("/learning/watch/virtual-teacher-guide");
   await expect(page.getByRole("heading", { name: "Virtual Teacher Guide – Hướng dẫn bài học", exact: true })).toBeVisible();
-  await expect(page.locator(".resource-count")).toHaveText("14 học liệu");
+  await expect(page.locator(".resource-count")).toHaveText("20 học liệu");
   await expect(page.getByRole("link", { name: "My Body Can Talk!" })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide/my-body-can-talk");
   await expect(page.getByRole("link", { name: "Your turn!" })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide/your-turn");
   await expect(page.getByRole("link", { name: "What Do I Want" })).toHaveAttribute("href", "/learning/watch/virtual-teacher-guide/what-do-i-want");
@@ -130,13 +130,43 @@ test("October Poems filter by age, product name, and topic and open the correct 
   }
 });
 
-test("September and October Print and Play cards use the shared Drive destination", async ({ page }) => {
+test("Print and Play cards include the November Drive destination", async ({ page }) => {
   await page.goto("/learning/print-and-plays");
   const cards = page.locator(".unit-card");
-  await expect(cards).toHaveCount(2);
-  for (const card of await cards.all()) {
+  await expect(cards).toHaveCount(3);
+  for (const card of await cards.all().then((all) => all.slice(0, 2))) {
     await expect(card).toHaveAttribute("href", "https://drive.google.com/drive/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ?usp=drive_link");
     await expect(card).toHaveAttribute("target", "_blank");
     await expect(card).toHaveAttribute("rel", "noopener noreferrer");
   }
+  const november = page.getByRole("link", { name: "Xem học liệu 11 - Nghề nghiệp | Bé tài năng" });
+  await expect(november).toHaveAttribute("href", "https://drive.google.com/drive/u/2/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ");
+  await expect(november).toHaveAttribute("target", "_blank");
+  await expect(november).toHaveAttribute("rel", "noopener noreferrer");
+});
+
+test("November Print and Play card is responsive without cropping or overflow", async ({ page }) => {
+  const november = page.getByRole("link", { name: "Xem học liệu 11 - Nghề nghiệp | Bé tài năng" });
+
+  await page.setViewportSize({ width: 1200, height: 900 });
+  await page.goto("/learning/print-and-plays");
+  await expect(november.locator(".unit-description")).toBeVisible();
+  expect(await november.evaluate((card) => {
+    const art = card.querySelector(".unit-art")!.getBoundingClientRect();
+    const cardBox = card.getBoundingClientRect();
+    return art.width / cardBox.width;
+  })).toBeGreaterThan(0.4);
+
+  await page.setViewportSize({ width: 768, height: 900 });
+  expect(await november.evaluate((card) => {
+    const art = card.querySelector(".unit-art")!.getBoundingClientRect();
+    const cardBox = card.getBoundingClientRect();
+    return art.width / cardBox.width;
+  })).toBeGreaterThan(0.9);
+  await expect(november.locator(".unit-description")).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(november.locator(".unit-description")).toBeHidden();
+  await expect(november.locator(".cta")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });

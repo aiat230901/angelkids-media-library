@@ -5,9 +5,8 @@ coverage/
 playwright-report/
 test-results/
 .env
-.env.local
-.env.production
-.env.*.local
+.env.*
+!.env.example
 .next-local.log
 .tmp-chrome-check/
 .tmp-learning-check.png

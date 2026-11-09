@@ -24,9 +24,9 @@
 
 ## Smoke test
 
-Verify the 98 manifest resources exist in production and are all `ACTIVE`, with category counts Watch 47, Read 25, Songs & Poems 17, Digital Flashcards 8, and Print and Plays 1. Report any database records outside the manifest separately; sync preserves them.
+Verify the 148 manifest resources exist in production and are all `ACTIVE`, with category counts Watch 71, Read 39, Songs & Poems 25, Digital Flashcards 12, and Print and Plays 1. This includes 50 November resources: Watch 24, Read 14, Songs & Poems 8, and Digital Flashcards 4. Report any database records outside the manifest separately; sync preserves them.
 
-Confirm the home page and each category route load; test the Level, Product Name, and Curriculum Unit filters for the four new October Poems. Verify each new video detail page, thumbnail, and player, and representative YouTube and Heyzine resources. Both September and October Print and Plays cards must open `https://drive.google.com/drive/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ?usp=drive_link` in a new tab. Check deployment logs, CSP behavior, and that External Access is closed.
+Confirm the home page and each category route load; test the Level, Product Name, and Curriculum Unit filters for `11 - Nghề nghiệp | Bé tài năng`. Verify the 50 November resources across their routes, thumbnails, video players/readers, and representative YouTube and Heyzine providers. The November Print and Play card must open `https://drive.google.com/drive/u/2/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ` in a new tab. Check deployment logs, CSP behavior, and that External Access is closed.
 
 ## Rollback
 

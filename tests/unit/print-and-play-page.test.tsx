@@ -6,7 +6,7 @@ import type { PublicResource } from "@/domain/public-resource";
 
 vi.mock("@/server/repositories/learning", () => ({ listResources: vi.fn(async (): Promise<PublicResource[]> => []) }));
 
-test("October links to Drive even without a learning resource record", async () => {
+test("October and November link to Drive without learning resource records", async () => {
   render(await PrintAndPlaysPage());
 
   const card = screen.getByRole("link", { name: "Xem học liệu 10 - Bản thân | Tôi khác biệt" });
@@ -17,6 +17,14 @@ test("October links to Drive even without a learning resource record", async () 
   expect(card).toHaveTextContent("10 - Bản thân | Tôi khác biệt");
   expect(card).toHaveTextContent("Play →");
   expect(screen.getByRole("img", { name: "Minh họa Print and Play tháng 10: Bản thân | Tôi khác biệt" })).toHaveAttribute("src", "/print-and-plays/10.png");
+
+  const novemberCard = screen.getByRole("link", { name: "Xem học liệu 11 - Nghề nghiệp | Bé tài năng" });
+  expect(novemberCard).toHaveAttribute("href", "https://drive.google.com/drive/u/2/folders/1Ukt9DHvoBpZfP9tT59mhlYN4zGUyIayJ");
+  expect(novemberCard).toHaveAttribute("target", "_blank");
+  expect(novemberCard).toHaveAttribute("rel", "noopener noreferrer");
+  expect(novemberCard).toHaveTextContent("Print and Play");
+  expect(novemberCard).toHaveTextContent("11 - Nghề nghiệp | Bé tài năng");
+  expect(screen.getByRole("img", { name: "Minh họa Print and Play tháng 11: Nghề nghiệp | Bé tài năng" })).toHaveAttribute("src", "/print-and-plays/11.png");
 });
 
 
